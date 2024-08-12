@@ -14,6 +14,13 @@ Additionally - Given the data below, train a Logicistic Regression Model to clas
 | 455492 MOSCOW | RU |
 | KOWLOON, HK | CN |
 
+## Setup
+
+```
+conda env create -f environment.yml
+conda activate nlp_addrs
+```
+
 If you're pulling data from OS, add `config.ini` with the following params:
 ```
 [opensearch]
