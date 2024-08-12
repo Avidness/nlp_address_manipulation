@@ -164,3 +164,4 @@ cython_debug/
 models
 data
 config.ini
+.DS_Store
