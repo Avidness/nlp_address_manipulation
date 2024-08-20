@@ -1,6 +1,7 @@
 from collections import defaultdict
 import re
 import subprocess
+import ollama
 
 def add_missing_spaces(text):
     # Add a space between a number followed by a letter
@@ -26,7 +27,7 @@ def df_to_dictionary(df, col_name, char_limit):
         words = re.split(r'[ \-/\\]', address)
         
         # Check if any word is longer than char_limit characters (exclude chinese characters and emails)
-        if any(len(word) > char_limit and not cn_regex.search(word) and not email_regex.match(word) for word in words):
+        if len(address) < 300 and any(len(word) > char_limit and not cn_regex.search(word) and not email_regex.match(word) for word in words):
             llm_addr = llama_split_address(address)
             words = llm_addr.split()
             llm_calls_count += 1
@@ -38,15 +39,22 @@ def df_to_dictionary(df, col_name, char_limit):
     print(f'Used the LLM {llm_calls_count} times')
     return word_dict
 
+
 def llama_split_address(address):
-    prompt = f'Given the following address, add spaces where necessary, do not add newlines, return only the address with appropriate spaces, do not respond with any other text: {address}'
-    result = subprocess.run(
-        ['ollama', 'run', 'llama3.1', prompt],
-        capture_output=True,
-        text=True
-    )
-    stripped_string = result.stdout.strip().strip('\n').strip('"').strip("'").replace('\n', ' ')
     print(f'{address}')
+    prompt = f'Given the following address, add spaces where necessary, do not add newlines, return only the address with appropriate spaces, do not respond with any other text: {address}'
+
+    response = ollama.chat(
+        model="llama3.1",
+        messages=[
+            {
+                "role": "user",
+                "content": prompt,
+            },
+        ],
+    )
+    content = response["message"]["content"]
+    stripped_string = content.strip().strip('\n').strip('"').strip("'").replace('\n', ' ')
     print(f'{stripped_string}')
     print()
     return stripped_string
