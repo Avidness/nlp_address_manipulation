@@ -1,5 +1,6 @@
 import pandas as pd
 from pathlib import Path
+from src.utils.common import add_country_iso_column
 
 # List of countries
 countries = [
@@ -56,7 +57,9 @@ for country in countries:
     synthetic_df = pd.concat([synthetic_df, new_row], ignore_index=True)
 
 # Lowercase all entries
-synthetic_df = synthetic_df.apply(lambda x: x.str.lower())
+synthetic_df['address'] = synthetic_df['address'].str.lower()
+
+synthetic_df = add_country_iso_column(synthetic_df)
 
 # Save the DataFrame to a CSV file
 output_path = data_dir / 'synthetic_addr_country_pairs.csv'

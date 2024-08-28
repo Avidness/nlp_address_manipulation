@@ -1,6 +1,7 @@
 from pathlib import Path
 import pandas as pd
-from utils.common import df_to_dictionary, add_missing_spaces
+from src.utils.localLLM import df_to_dictionary
+from src.utils.common import add_missing_spaces
 import time
 
 # load data\

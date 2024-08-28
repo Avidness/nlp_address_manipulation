@@ -1,6 +1,7 @@
 import pandas as pd
 import re
 from pathlib import Path
+from src.utils.common import add_missing_spaces
 
 data_dir = Path(__file__).resolve().parent.parent.parent / 'data'
 addresses_df = pd.read_csv(data_dir / 'addr_clean.csv')
@@ -17,13 +18,6 @@ addresses_df = addresses_df[addresses_df['address'].str.contains(' ')]
 # create a clean col (with spacing) and a dirty col (without spacing)
 addresses_df = addresses_df.rename(columns={'address': 'address_clean'})
 addresses_df['address_dirty'] = addresses_df['address_clean'].str.replace(' ', '')
-
-def add_missing_spaces(text):
-    # Add a space between a number followed by a letter
-    text = re.sub(r'(\d)([a-zA-Z])', r'\1 \2', text)
-    # Add a space between a letter followed by a number
-    text = re.sub(r'([a-zA-Z])(\d)', r'\1 \2', text)
-    return text
 
 # additional tweaking to improve the "clean" col
 addresses_df['address_clean'] = addresses_df['address_clean'].apply(add_missing_spaces)
