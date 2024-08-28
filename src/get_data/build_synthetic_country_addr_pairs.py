@@ -22,10 +22,11 @@ countries = [
     'Armenia', 'Lithuania', 'Jamaica', 'Albania', 'Gambia', 'Gabon', 'Botswana', 'Lesotho', 'Guinea-Bissau',
     'Slovenia', 'Equatorial Guinea', 'Latvia', 'North Macedonia', 'Bahrain', 'Trinidad and Tobago', 'Timor-Leste',
     'Estonia', 'Cyprus', 'Mauritius', 'Eswatini', 'Djibouti', 'Fiji', 'Comoros', 'Guyana', 'Solomon Islands', 'Bhutan',
-    'Luxembourg', 'Montenegro', 'Suriname', 'Malta', 'Maldives', 'Micronesia', 'Cabo Verde', 'Brunei', 'Belize',
+    'Luxembourg', 'Montenegro', 'Suriname', 'Malta', 'Maldives', 'Micronesia', 'Cabo Verde', 'Brunei', 'Belize', 'Hong Kong'
     'Bahamas', 'Iceland', 'Vanuatu', 'Barbados', 'Sao Tome & Principe', 'Samoa', 'Saint Lucia', 'Kiribati', 'Seychelles',
     'Grenada', 'Tonga', 'St. Vincent & Grenadines', 'Antigua and Barbuda', 'Andorra', 'Dominica', 'Saint Kitts & Nevis',
-    'Liechtenstein', 'Monaco', 'Marshall Islands', 'San Marino', 'Palau', 'Nauru', 'Tuvalu', 'Holy See'
+    'Liechtenstein', 'Monaco', 'Marshall Islands', 'San Marino', 'Palau', 'Nauru', 'Tuvalu', 'Holy See', 'Anguilla', 'Curaçao',
+    'American Samoa'
 ]
 
 # Load the worldcities.csv
@@ -58,6 +59,8 @@ for country in countries:
 
 # Lowercase all entries
 synthetic_df['address'] = synthetic_df['address'].str.lower()
+
+synthetic_df = synthetic_df.dropna(subset=['address'])
 
 synthetic_df = add_country_iso_column(synthetic_df)
 
