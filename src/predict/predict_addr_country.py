@@ -8,7 +8,7 @@ df = pd.read_csv(data_dir / 'addr_chopped.csv')
 
 # records where the country field is empty
 df = df.dropna(subset=['addr_chopped'])
-df_empty_country = df[df['country'].isna()]
+df_empty_country = df[df['country_iso'].isna()]
 
 # load the model
 model_dir = Path(__file__).resolve().parent.parent.parent / 'models'

@@ -5,6 +5,7 @@ import pandas as pd
 import pickle
 from pathlib import Path
 import re
+from src.utils.common import add_country_iso_column
 
 # Download the words dataset if you haven't already
 nltk.download('brown')
@@ -84,5 +85,6 @@ df = df[df['address'].notna() & df['address'].str.strip().astype(bool)]
 df['addr_chopped'] = df['address'].apply(lambda s: add_spaces_greedy(s, combined_word_list))
 df['addr_chopped'] = df['addr_chopped'].apply(remove_unwanted_words_and_numbers)
 df['addr_chopped'] = df['addr_chopped'].str.replace(r'\s+', ' ', regex=True)
+df = add_country_iso_column(df)
 
 df.to_csv(data_dir / 'addr_chopped.csv', index=False)

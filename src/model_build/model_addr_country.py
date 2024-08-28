@@ -6,7 +6,6 @@ from sklearn.metrics import accuracy_score
 from pathlib import Path
 import joblib
 
-
 data_dir = Path(__file__).resolve().parent.parent.parent / 'data'
 synthetic_df = pd.read_csv(data_dir / 'synthetic_addr_country_pairs.csv')
 real_df = pd.read_csv(data_dir / 'addr_chopped.csv')
@@ -15,11 +14,11 @@ synthetic_df = synthetic_df.rename(columns={'address': 'addr_chopped'})
 df = pd.concat([synthetic_df, real_df])
 
 # Get recs with a non-empty country value
-df_with_country = df.dropna(subset=['country']).dropna(subset=['addr_chopped'])
+df_with_country = df.dropna(subset=['country_iso']).dropna(subset=['addr_chopped'])
 
 # Split
 X = df_with_country['addr_chopped']
-y = df_with_country['country']
+y = df_with_country['country_iso']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Vectorize
