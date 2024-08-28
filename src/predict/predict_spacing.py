@@ -4,10 +4,10 @@ from datasets import Dataset
 from pathlib import Path
 import torch
 
-data_dir = Path(__file__).resolve().parent.parent / 'data'
+data_dir = Path(__file__).resolve().parent.parent.parent / 'data'
 data_df = pd.read_csv(data_dir / 'addr_clean_manual.csv')
 
-model_dir = Path(__file__).resolve().parent.parent / 'models'
+model_dir = Path(__file__).resolve().parent.parent.parent / 'models'
 model_path = model_dir / 'transform_spacing'
 model = AutoModelForSeq2SeqLM.from_pretrained(model_path)
 tokenizer = AutoTokenizer.from_pretrained(model_path)

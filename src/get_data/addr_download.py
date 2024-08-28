@@ -67,5 +67,5 @@ df2.rename(columns={'Entity Address in Trade Data': 'address', 'Entity Country':
 # combine dfs and store as csv
 df = pd.concat([df1, df2], ignore_index=True)
 
-data_dir = Path(__file__).resolve().parent.parent / 'data'
+data_dir = Path(__file__).resolve().parent.parent.parent / 'data'
 df.to_csv(data_dir / 'addr_raw.csv', index=False)

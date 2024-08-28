@@ -1,7 +1,7 @@
 import pandas as pd
 from pathlib import Path
 
-data_dir = Path(__file__).resolve().parent.parent / 'data'
+data_dir = Path(__file__).resolve().parent.parent.parent / 'data'
 df = pd.read_csv(data_dir / 'addr_raw.csv')
 
 # Specific parse/cleanse for this data 

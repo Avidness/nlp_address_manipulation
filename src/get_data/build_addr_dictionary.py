@@ -4,7 +4,7 @@ from utils.common import df_to_dictionary, add_missing_spaces
 import time
 
 # load data\
-data_dir = Path(__file__).resolve().parent.parent / 'data'
+data_dir = Path(__file__).resolve().parent.parent.parent / 'data'
 df = pd.read_csv(data_dir / 'addr_clean.csv')
 df = df.dropna(subset=['address'])
 

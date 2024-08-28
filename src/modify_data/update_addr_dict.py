@@ -6,7 +6,7 @@ import csv
 special_words = ['deli', 'istanbul', 'tokyo', 'strasse', 'strase', 'straße', 'turkey', 'turkiye', 'moscow', 'building', 'china', 'hong','kong','unit','flat','plaza','dubai','munchen', 'city', 'room', 'province', 'kowloon', 'district']
 
 # Load the original pickle file
-data_dir = Path(__file__).resolve().parent.parent / 'data'
+data_dir = Path(__file__).resolve().parent.parent.parent / 'data'
 with open(data_dir / 'addr_word_dict.pkl', 'rb') as f:
     data_dict = pickle.load(f)
 

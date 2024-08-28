@@ -15,7 +15,7 @@ nlp = spacy.blank("en")
 spacy_words = set(nlp.vocab.strings)
 
 # Load the dictionary from the .pkl file
-data_dir = Path(__file__).resolve().parent.parent / 'data'
+data_dir = Path(__file__).resolve().parent.parent.parent / 'data'
 with open(data_dir / 'addr_word_dict_cleaned.pkl', 'rb') as file:
     my_dict = pickle.load(file)
 
@@ -75,7 +75,7 @@ def remove_unwanted_words_and_numbers(text):
     
     return " ".join(words)
 
-data_dir = Path(__file__).resolve().parent.parent / 'data'
+data_dir = Path(__file__).resolve().parent.parent.parent / 'data'
 df = pd.read_csv(data_dir / 'addr_clean.csv')
 
 df = df[df['address'].notna() & df['address'].str.strip().astype(bool)]
@@ -83,5 +83,6 @@ df = df[df['address'].notna() & df['address'].str.strip().astype(bool)]
 # Apply the transformations
 df['addr_chopped'] = df['address'].apply(lambda s: add_spaces_greedy(s, combined_word_list))
 df['addr_chopped'] = df['addr_chopped'].apply(remove_unwanted_words_and_numbers)
+df['addr_chopped'] = df['addr_chopped'].str.replace(r'\s+', ' ', regex=True)
 
 df.to_csv(data_dir / 'addr_chopped.csv', index=False)

@@ -2,7 +2,7 @@ import pandas as pd
 import re
 from pathlib import Path
 
-data_dir = Path(__file__).resolve().parent.parent / 'data'
+data_dir = Path(__file__).resolve().parent.parent.parent / 'data'
 addresses_df = pd.read_csv(data_dir / 'addr_clean.csv')
 
 # we don't need the country for this part

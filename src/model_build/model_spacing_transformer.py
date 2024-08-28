@@ -5,7 +5,7 @@ from datasets import Dataset
 from sklearn.model_selection import train_test_split
 from pathlib import Path
 
-data_dir = Path(__file__).resolve().parent.parent / 'data'
+data_dir = Path(__file__).resolve().parent.parent.parent / 'data'
 data_df = pd.read_csv(data_dir / 'addr_train_spacing.csv')
 
 train_df, eval_df = train_test_split(data_df, test_size=0.1, random_state=42)
@@ -15,7 +15,7 @@ eval_dataset = Dataset.from_pandas(eval_df)
 model_name = 't5-small'
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
-model_dir = Path(__file__).resolve().parent.parent / 'models'
+model_dir = Path(__file__).resolve().parent.parent.parent / 'models'
 model_path = model_dir / 'transform_spacing'
 
 

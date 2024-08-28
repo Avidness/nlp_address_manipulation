@@ -3,7 +3,7 @@ import pandas as pd
 from pathlib import Path
 import joblib
 
-data_dir = Path(__file__).resolve().parent.parent / 'data'
+data_dir = Path(__file__).resolve().parent.parent.parent / 'data'
 df = pd.read_csv(data_dir / 'addr_chopped.csv')
 
 # records where the country field is empty
@@ -11,7 +11,7 @@ df = df.dropna(subset=['addr_chopped'])
 df_empty_country = df[df['country'].isna()]
 
 # load the model
-model_dir = Path(__file__).resolve().parent.parent / 'models'
+model_dir = Path(__file__).resolve().parent.parent.parent / 'models'
 model = joblib.load(model_dir / 'addr_country_predict.joblib')
 vectorizer = joblib.load(model_dir / 'tfidf_vectorizer.joblib')
 
