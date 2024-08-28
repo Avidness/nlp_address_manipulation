@@ -6,43 +6,16 @@ from sklearn.metrics import accuracy_score
 from pathlib import Path
 import joblib
 
-# List of countries
-countries = [
-    'India','China','United States','Indonesia','Pakistan','Nigeria','Brazil','Bangladesh','Russia',
-    'Ethiopia','Mexico','Japan','Egypt','Philippines','DR Congo','Vietnam','Iran','Turkey','Germany',
-    'Thailand','United Kingdom','Tanzania','France','South Africa','Italy','Kenya','Myanmar','Colombia',
-    'South Korea','Sudan','Uganda','Spain','Algeria','Iraq','Argentina','Afghanistan','Yemen','Canada',
-    'Poland','Morocco','Angola','Ukraine','Uzbekistan','Malaysia','Mozambique','Ghana','Peru','Saudi Arabia',
-    'Madagascar','Côte d\'Ivoire','Nepal','Cameroon','Venezuela','Niger','Australia','North Korea','Syria',
-    'Mali','Burkina Faso','Sri Lanka','Malawi','Zambia','Kazakhstan','Chad','Chile','Romania','Somalia',
-    'Senegal','Guatemala','Netherlands','Ecuador','Cambodia','Zimbabwe','Guinea','Benin','Rwanda','Burundi',
-    'Bolivia','Tunisia','South Sudan','Haiti','Belgium','Jordan','Dominican Republic','United Arab Emirates',
-    'Cuba','Honduras','Czech Republic (Czechia)','Sweden','Tajikistan','Papua New Guinea','Portugal',
-    'Azerbaijan','Greece','Hungary','Togo','Israel','Austria','Belarus','Switzerland','Sierra Leone',
-    'Laos','Turkmenistan','Libya','Kyrgyzstan','Paraguay','Nicaragua','Bulgaria','Serbia','El Salvador',
-    'Congo','Denmark','Singapore','Lebanon','Finland','Liberia','Norway','Slovakia','State of Palestine',
-    'Central African Republic','Oman','Ireland','New Zealand','Mauritania','Costa Rica','Kuwait','Panama',
-    'Croatia','Georgia','Eritrea','Mongolia','Uruguay','Bosnia and Herzegovina','Qatar','Moldova','Namibia',
-    'Armenia','Lithuania','Jamaica','Albania','Gambia','Gabon','Botswana','Lesotho','Guinea-Bissau',
-    'Slovenia','Equatorial Guinea','Latvia','North Macedonia','Bahrain','Trinidad and Tobago','Timor-Leste',
-    'Estonia','Cyprus','Mauritius','Eswatini','Djibouti','Fiji','Comoros','Guyana','Solomon Islands','Bhutan',
-    'Luxembourg','Montenegro','Suriname','Malta','Maldives','Micronesia','Cabo Verde','Brunei','Belize',
-    'Bahamas','Iceland','Vanuatu','Barbados','Sao Tome & Principe','Samoa','Saint Lucia','Kiribati','Seychelles',
-    'Grenada','Tonga','St. Vincent & Grenadines','Antigua and Barbuda','Andorra','Dominica','Saint Kitts & Nevis',
-    'Liechtenstein','Monaco','Marshall Islands','San Marino','Palau','Nauru','Tuvalu','Holy See'
-]
 
-data_dir = Path(__file__).resolve().parent.parent / 'data'
-df = pd.read_csv(data_dir / 'addr_chopped.csv')
-df['text'] = df['addr_chopped'].str.replace(r'\s+', ' ', regex=True)
+data_dir = Path(__file__).resolve().parent.parent.parent / 'data'
+synthetic_df = pd.read_csv(data_dir / 'synthetic_addr_country_pairs.csv')
+real_df = pd.read_csv(data_dir / 'addr_chopped.csv')
+
+synthetic_df = synthetic_df.rename(columns={'address': 'addr_chopped'})
+df = pd.concat([synthetic_df, real_df])
 
 # Get recs with a non-empty country value
 df_with_country = df.dropna(subset=['country']).dropna(subset=['addr_chopped'])
-
-# Add new rows to df_with_country from the countries list
-for country in countries:
-    new_row = pd.DataFrame({'addr_chopped': [country.lower()], 'country': [country.lower()]})
-    df_with_country = pd.concat([df_with_country, new_row], ignore_index=True)
 
 # Split
 X = df_with_country['addr_chopped']
@@ -64,7 +37,7 @@ accuracy = accuracy_score(y_test, y_pred)
 print(f'Accuracy: {accuracy:.2f}')
 
 # Store the model
-model_dir = Path(__file__).resolve().parent.parent / 'models'
+model_dir = Path(__file__).resolve().parent.parent.parent / 'models'
 joblib.dump(model, model_dir / 'addr_country_predict.joblib')
 joblib.dump(vectorizer, model_dir / 'tfidf_vectorizer.joblib')
 print('Cached model')
