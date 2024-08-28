@@ -75,21 +75,6 @@ def remove_unwanted_words_and_numbers(text):
     
     return " ".join(words)
 
-# Example usage
-text = "ihavesentencesthataremissingspaces"
-test_data = [
-    "ihavesentencesthataremissingspaces",
-    "000000GUANGDONGSHUNDEFOSHANRONGGUICHUANG",
-    "00695WARSZAWAUL NOWOGRODZKA NR50LOK515",
-    "01001ZILINABRATISLAVASKA CESTA60",
-    "01189DRESDENCUNNERSDORFER STR 25",
-    "1STAVENNYC10019Dresden",
-    "00000 SOUTH SUDAN JUBA PO BOX 440 JEBEL KUJUR",
-    "00160HELSINKILUOTSIKATU3",
-    "00144ROMAVIA MAROCCO56",
-    "00700COLOMBOANANDA COOMARASWAMY MAWATHA51"
-]
-
 data_dir = Path(__file__).resolve().parent.parent / 'data'
 df = pd.read_csv(data_dir / 'addr_clean.csv')
 
