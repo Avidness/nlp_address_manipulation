@@ -29,6 +29,26 @@ def df_to_dictionary(df, col_name, char_limit):
     print(f'Used the LLM {llm_calls_count} times')
     return word_dict
 
+def llama_get_country(address):
+    print(f'{address}')
+    prompt = f'Given the following address, tell me which country it is from, assign a probability of your accuracy between 0 and 1. if there are multiple addresses that could correspond to different countries, assign a lower probability score. respond only with the 2 digit ISO country code and the probability level separated by a comma do not include any other text or explaination: {address}'
+
+    response = ollama.chat(
+        model="llama3.1",
+        messages=[
+            {
+                "role": "user",
+                "content": prompt,
+            },
+        ],
+    )
+    content = response["message"]["content"]
+    stripped_string = content.strip().strip('\n').strip('"').strip("'").replace('\n', ' ')
+    print(f'{stripped_string}')
+    country_code, certainty = stripped_string.split(', ')
+    certainty = float(certainty)
+    print()
+    return country_code, certainty
 
 def llama_split_address(address):
     print(f'{address}')
