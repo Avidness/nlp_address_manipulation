@@ -75,5 +75,58 @@ def add_country_iso_column(df):
       'Republic of Moldova': 'MD', 'Plurinational State of Bolivia': 'BO', 
       'The former Yugoslav Republic of Macedonia': 'MK', 'Ivory Coast': 'CI'
   }
-  df['country_iso'] = df['country'].map(country_iso_map)
+  df['country_iso_assigned'] = df['country'].map(country_iso_map)
   return df
+
+
+def remove_unwanted_words_and_numbers(text):
+    # List of unwanted words
+    unwanted_words = {
+        'avenue', 'rd', 'road', 'blvd', 'boulevard', 'st', 'street', 'building', 'buildings', 'po', 'box', 'pobox', 'unknown'
+    }
+    
+    # Remove specific special characters including '/', '-', '.', ',', apostrophes, single and double quotes
+    text = re.sub(r'[\/\-,\.\!@#\$%\^&\*\(\)_\+=\'\"]', '', text)
+    
+    # Remove unwanted words
+    words = text.split()
+    words = [word for word in words if word not in unwanted_words]
+    
+    # Remove numbers and single-character substrings
+    words = [word for word in words if not word.isdigit() and len(word) > 1]
+    
+    return " ".join(words)
+
+
+
+def add_spaces_greedy(text, word_dict):
+    i = 0
+    result = []
+    text = text.lower()
+
+    while i < len(text):
+        # Initialize variables for the longest word found
+        longest_word = None
+        longest_len = 0
+        
+        # Try to find the longest word in the dictionary that matches the current substring
+        for j in range(i + 1, len(text) + 1):
+            word = text[i:j]
+            if word in word_dict and len(word) > longest_len:
+                longest_word = word
+                longest_len = len(word)
+        
+        # If a word was found, add it to the result
+        if longest_word:
+            result.append(longest_word)
+            i += longest_len
+        else:
+            # If no word is found, move one character forward and add it as-is
+            result.append(text[i])
+            i += 1
+
+    # Rejoin numeric sequences
+    processed_text = " ".join(result)
+    processed_text = re.sub(r'(\d)\s+(?=\d)', r'\1', processed_text)
+    
+    return processed_text

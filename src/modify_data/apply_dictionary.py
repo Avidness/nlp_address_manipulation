@@ -7,14 +7,6 @@ from pathlib import Path
 import re
 from src.utils.common import add_country_iso_column
 
-# Download the words dataset if you haven't already
-nltk.download('brown')
-
-# Initialize the word lists from both nltk and spaCy
-nltk_words = set(brown.words())
-nlp = spacy.blank("en")
-spacy_words = set(nlp.vocab.strings)
-
 # Load the dictionary from the .pkl file
 data_dir = Path(__file__).resolve().parent.parent.parent / 'data'
 with open(data_dir / 'addr_word_dict_cleaned.pkl', 'rb') as file:
@@ -64,20 +56,23 @@ def add_spaces_greedy(text, word_dict):
 def remove_unwanted_words_and_numbers(text):
     # List of unwanted words
     unwanted_words = {
-        'avenue', 'rd', 'road', 'blvd', 'boulevard', 'st', 'street', 'building', 'buildings'
+        'avenue', 'rd', 'road', 'blvd', 'boulevard', 'st', 'street', 'building', 'buildings', 'po', 'box', 'pobox'
     }
+    
+    # Remove specific special characters including '/', '-', '.', ',', apostrophes, single and double quotes
+    text = re.sub(r'[\/\-,\.\!@#\$%\^&\*\(\)_\+=\'\"]', '', text)
     
     # Remove unwanted words
     words = text.split()
     words = [word for word in words if word not in unwanted_words]
     
-    # Remove numbers
-    words = [word for word in words if not word.isdigit()]
+    # Remove numbers and single-character substrings
+    words = [word for word in words if not word.isdigit() and len(word) > 1]
     
     return " ".join(words)
 
 data_dir = Path(__file__).resolve().parent.parent.parent / 'data'
-df = pd.read_csv(data_dir / 'addr_clean.csv')
+df = pd.read_csv(data_dir / 'addr_with_country_llm.csv')
 
 df = df[df['address'].notna() & df['address'].str.strip().astype(bool)]
 
@@ -87,4 +82,4 @@ df['addr_chopped'] = df['addr_chopped'].apply(remove_unwanted_words_and_numbers)
 df['addr_chopped'] = df['addr_chopped'].str.replace(r'\s+', ' ', regex=True)
 df = add_country_iso_column(df)
 
-df.to_csv(data_dir / 'addr_chopped.csv', index=False)
+df.to_csv(data_dir / 'addr_chopped_with_country.csv', index=False)
